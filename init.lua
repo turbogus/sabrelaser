@@ -34,8 +34,10 @@ minetest.register_tool("sabrelaser:sabrelaser_rouge", {
 		},
 		damage_groups = {fleshy=20},
 			
-	}
-
+	},
+	on_use = function(itemstack, user, pointed_thing)
+    play_sabrelaser(user) --Fonction qui envoie le son sur une surface restreinte
+  end,
 })
 
 --sabre vert
@@ -62,9 +64,10 @@ minetest.register_tool("sabrelaser:sabrelaser_vert", {
 			snappy={times={[1]=1.90, [2]=0.90, [3]=0.30}, uses=40, maxlevel=3},
 		},
 		damage_groups = {fleshy=20},
-			
-	}
-
+	},
+	on_use = function(itemstack, user, pointed_thing)
+    play_sabrelaser(user) --Fonction qui envoie le son sur une surface restreinte
+  end,
 })
 
 
@@ -92,8 +95,12 @@ minetest.register_tool("sabrelaser:sabrelaser_bleu", {
 			snappy={times={[1]=1.90, [2]=0.90, [3]=0.30}, uses=40, maxlevel=3},
 		},
 		damage_groups = {fleshy=20},
-			
-	}
+	},
+	on_use = function(itemstack, user, pointed_thing)
+    play_sabrelaser(user) --Fonction qui envoie le son sur une surface restreinte
+  end,
+})
+>>>>>>> Optimisation du mod
 
 })
 
@@ -531,23 +538,16 @@ minetest.register_tool("sabrelaser:bague_energie", {
 })
 
 --*************************
-
---Physique : son des sabres laser
-
-minetest.register_on_punchnode(function(p, node, player)
-
-	local sabre = player:get_wielded_item():get_name()
-	
-	
-	if  sabre == "sabrelaser:sabrelaser_bleu" or sabre == "sabrelaser:sabrelaser_rouge" or sabre == "sabrelaser:sabrelaser_vert" then
-		minetest.sound_play({
-					name = "laser",
-					gain = 0.2,
-					max_hear_distance = 5,
-					})
-	end
-	
-end)
+--son des sabres !
+function play_sabrelaser(player)
+  if not player then return end --si pas de joueur.... fin
+  playerpos = player:getpos()
+	minetest.sound_play("laser",{
+    pos = {x=playerpos.x,y=playerpos.y,z=playerpos.z}, --position du joueur
+    gain = 1.0,
+    max_hear_distance = 32, --joue dans un rayon de 32 blocs
+  })
+end
 
 
 
